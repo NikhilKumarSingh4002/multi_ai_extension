@@ -23,15 +23,18 @@
           <option value="https://grok.com">Grok</option>
         </select>
         <button id="inject-url" title="Inject Current URL">URL</button>
+
         <button id="inject-screenshot" title="Copy Screenshot">Screenshot</button>
+        <button id="enable-mic" title="Enable Microphone Access" style="display: none;">🎤</button>
       </div>
     </header>
     <main>
-      <iframe id="ai-frame" src="https://gemini.google.com/app" frameborder="0"></iframe>
+      <iframe id="ai-frame" src="https://gemini.google.com/app" frameborder="0"
+        allow="microphone; camera; clipboard-write; clipboard-read; fullscreen"></iframe>
       <div id="toast" class="toast hidden">Action Successful</div>
     </main>
   </div>
-  <script src="sidepanel.js"></script>
+  <script src="sidepanel.js?v=2"></script>
 </body>
 
 </html>

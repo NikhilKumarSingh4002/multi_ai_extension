@@ -24,6 +24,14 @@
                 {
                     "header": "cross-origin-resource-policy",
                     "operation": "remove"
+                },
+                {
+                    "header": "permissions-policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "feature-policy",
+                    "operation": "remove"
                 }
             ]
         },

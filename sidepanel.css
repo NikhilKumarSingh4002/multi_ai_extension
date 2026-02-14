@@ -47,6 +47,11 @@ header {
   letter-spacing: 0.5px;
 }
 
+.selector-area {
+  display: flex;
+  align-items: center;
+}
+
 .selector-area select {
   background-color: var(--bg-color);
   color: var(--text-color);

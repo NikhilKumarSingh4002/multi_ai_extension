@@ -87,4 +87,37 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     btnUrl.addEventListener('click', injectUrl);
     btnScreenshot.addEventListener('click', captureScreenshot);
+
+    // Microphone Permission Logic
+    const btnMic = document.getElementById('enable-mic');
+
+    async function checkMicPermission() {
+        try {
+            const permissionStatus = await navigator.permissions.query({ name: 'microphone' });
+            if (permissionStatus.state !== 'granted') {
+                btnMic.style.display = 'inline-block';
+            } else {
+                btnMic.style.display = 'none';
+            }
+
+            permissionStatus.onchange = () => {
+                if (permissionStatus.state === 'granted') {
+                    btnMic.style.display = 'none';
+                } else {
+                    btnMic.style.display = 'inline-block';
+                }
+            };
+        } catch (err) {
+            console.error('Permission check failed:', err);
+            // If query fails (firefox etc), just show button? Or hide? 
+            // Chrome supports it.
+            btnMic.style.display = 'inline-block';
+        }
+    }
+
+    btnMic.addEventListener('click', () => {
+        chrome.tabs.create({ url: 'permission.html' });
+    });
+
+    checkMicPermission();
 });
