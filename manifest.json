@@ -41,6 +41,17 @@
             ],
             "all_frames": true,
             "run_at": "document_idle"
+        },
+        {
+            "matches": [
+                "*://*.claude.ai/*",
+                "*://*.anthropic.com/*"
+            ],
+            "js": [
+                "antidetect.js"
+            ],
+            "run_at": "document_start",
+            "world": "MAIN"
         }
     ],
     "declarative_net_request": {
@@ -54,5 +65,8 @@
     },
     "icons": {
         "128": "image.png"
+    },
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'; frame-src *; connect-src *; style-src 'self' 'unsafe-inline'; img-src * data: blob:;"
     }
 }

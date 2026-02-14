@@ -11,22 +11,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (saved.lastAiUrl) {
         selector.value = saved.lastAiUrl;
         frame.src = saved.lastAiUrl;
+        if (saved.lastAiUrl.includes('claude.ai')) {
+            showToast('⚠️ Voice mode is unavailable for Claude in the side panel.', 5000);
+        }
     }
 
     selector.addEventListener('change', (e) => {
         const url = e.target.value;
         frame.src = url;
         chrome.storage.local.set({ lastAiUrl: url });
+        if (url.includes('claude.ai')) {
+            showToast('⚠️ Voice mode is unavailable for Claude in the side panel.');
+        }
     });
 
-    function showToast(message) {
+    function showToast(message, duration = 2000) {
         toast.textContent = message;
         toast.classList.add('show');
         toast.classList.remove('hidden');
         setTimeout(() => {
             toast.classList.remove('show');
             setTimeout(() => toast.classList.add('hidden'), 300);
-        }, 2000);
+        }, duration);
     }
 
     // Helper to get active tab
