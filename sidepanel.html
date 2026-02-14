@@ -22,10 +22,13 @@
           <option value="https://chat.deepseek.com/">DeepSeek</option>
           <option value="https://grok.com">Grok</option>
         </select>
+        <button id="inject-url" title="Inject Current URL">URL</button>
+        <button id="inject-screenshot" title="Copy Screenshot">Screenshot</button>
       </div>
     </header>
     <main>
       <iframe id="ai-frame" src="https://gemini.google.com/app" frameborder="0"></iframe>
+      <div id="toast" class="toast hidden">Action Successful</div>
     </main>
   </div>
   <script src="sidepanel.js"></script>

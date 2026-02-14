@@ -7,18 +7,12 @@
         "sidePanel",
         "declarativeNetRequest",
         "declarativeNetRequestFeedback",
-        "storage"
+        "storage",
+        "scripting",
+        "activeTab"
     ],
     "host_permissions": [
-        "*://*.google.com/*",
-        "*://*.gemini.google.com/*",
-        "*://*.openai.com/*",
-        "*://*.chatgpt.com/*",
-        "*://*.anthropic.com/*",
-        "*://*.claude.ai/*",
-        "*://*.deepseek.com/*",
-        "*://*.grok.com/*",
-        "*://*.x.com/*"
+        "<all_urls>"
     ],
     "background": {
         "service_worker": "background.js"
@@ -29,6 +23,26 @@
     "action": {
         "default_title": "Open Multi-AI Panel"
     },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.google.com/*",
+                "*://*.gemini.google.com/*",
+                "*://*.openai.com/*",
+                "*://*.chatgpt.com/*",
+                "*://*.anthropic.com/*",
+                "*://*.claude.ai/*",
+                "*://*.deepseek.com/*",
+                "*://*.grok.com/*",
+                "*://*.x.com/*"
+            ],
+            "js": [
+                "injector.js"
+            ],
+            "all_frames": true,
+            "run_at": "document_idle"
+        }
+    ],
     "declarative_net_request": {
         "rule_resources": [
             {
