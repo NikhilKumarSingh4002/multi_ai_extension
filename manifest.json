@@ -67,6 +67,6 @@
         "128": "image.png"
     },
     "content_security_policy": {
-        "extension_pages": "script-src 'self'; object-src 'self'; frame-src *; connect-src *; style-src 'self' 'unsafe-inline'; img-src * data: blob:;"
+        "extension_pages": "script-src 'self'; object-src 'self'; frame-src *; connect-src * data: blob:; style-src 'self' 'unsafe-inline'; img-src * data: blob:;"
     }
 }
