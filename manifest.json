@@ -37,9 +37,8 @@
                 "path": "rules.json"
             }
         ]
+    },
+    "icons": {
+        "128": "image.png"
     }
-},
-"icons": {
-    "128": "image.png"
-}
 }
