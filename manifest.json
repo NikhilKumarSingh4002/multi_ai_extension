@@ -1,0 +1,45 @@
+{
+    "manifest_version": 3,
+    "name": "Multi-AI Side Panel",
+    "version": "1.0",
+    "description": "Access Gemini, ChatGPT, Claude, DeepSeek, and Grok in your side panel.",
+    "permissions": [
+        "sidePanel",
+        "declarativeNetRequest",
+        "declarativeNetRequestFeedback",
+        "storage"
+    ],
+    "host_permissions": [
+        "*://*.google.com/*",
+        "*://*.gemini.google.com/*",
+        "*://*.openai.com/*",
+        "*://*.chatgpt.com/*",
+        "*://*.anthropic.com/*",
+        "*://*.claude.ai/*",
+        "*://*.deepseek.com/*",
+        "*://*.grok.com/*",
+        "*://*.x.com/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "side_panel": {
+        "default_path": "sidepanel.html"
+    },
+    "action": {
+        "default_title": "Open Multi-AI Panel"
+    },
+    "declarative_net_request": {
+        "rule_resources": [
+            {
+                "id": "ruleset_1",
+                "enabled": true,
+                "path": "rules.json"
+            }
+        ]
+    }
+},
+"icons": {
+    "128": "image.png"
+}
+}
