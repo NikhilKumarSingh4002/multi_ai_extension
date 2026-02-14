@@ -71,7 +71,7 @@ The `injector.js` content script listens for `INJECT_TEXT` messages and uses heu
 `rules.json` uses Chrome's Declarative Net Request API to manage headers (origin spoofing, CSP relaxation) so AI sites load properly inside the side panel iframe.
 
 ### Claude Voice Handling
-`antidetect.js` runs in the `MAIN` world on Claude pages. It uses a `MutationObserver` to intercept voice-mode error messages and replaces them with a friendly notice, while also disabling the voice button with a click-intercept.
+`antidetect.js` runs in the `MAIN` world on Claude pages. It uses a `MutationObserver` to intercept voice-mode error messages.
 
 ---
 
