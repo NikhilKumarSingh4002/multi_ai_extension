@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const selector = document.getElementById('ai-selector');
     const frame = document.getElementById('ai-frame');
-    const btnSelection = document.getElementById('inject-selection');
-    const btnPage = document.getElementById('inject-page');
     const btnScreenshot = document.getElementById('inject-screenshot');
     const toast = document.getElementById('toast');
 
@@ -41,7 +39,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         return tab;
     }
 
-    // Injection Logic
+    // Helper: focus the AI iframe so user can Ctrl+V
+    function focusIframe() {
+        frame.focus();
+    }
+
+    // URL Injection Logic
     async function injectUrl() {
         try {
             const tab = await getActiveTab();
@@ -52,7 +55,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const url = tab.url;
             await navigator.clipboard.writeText(url);
-            showToast('URL Copied');
+            focusIframe();
+            showToast('URL Copied — Ctrl+V to paste');
 
         } catch (err) {
             console.error('Copy failed:', err);
@@ -69,19 +73,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            // Capture screenshot as data URL
             const dataUrl = await chrome.tabs.captureVisibleTab(null, { format: 'png' });
 
-            // Convert data URL to Blob for clipboard
+            // Write to clipboard
             const res = await fetch(dataUrl);
             const blob = await res.blob();
-
-            // Copy to clipboard
             await navigator.clipboard.write([
                 new ClipboardItem({ [blob.type]: blob })
             ]);
 
-            showToast('Image Copied');
+            focusIframe();
+            showToast('Screenshot Copied — Ctrl+V to paste');
 
         } catch (err) {
             console.error('Screenshot failed:', err);
@@ -111,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         overlay.style.width = '100vw';
                         overlay.style.height = '100vh';
                         overlay.style.backgroundColor = 'rgba(0,0,0,0.3)';
-                        overlay.style.zIndex = '2147483647'; // max z-index
+                        overlay.style.zIndex = '2147483647';
                         overlay.style.cursor = 'crosshair';
                         overlay.style.overflow = 'hidden';
 
@@ -224,42 +226,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const croppedDataUrl = canvas.toDataURL('image/png');
 
-            try {
-                const res = await fetch(croppedDataUrl);
-                const blob = await res.blob();
+            // Write to clipboard from the active tab (which IS focused)
+            await chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                func: async (imgDataUrl) => {
+                    const res = await fetch(imgDataUrl);
+                    const blob = await res.blob();
+                    await navigator.clipboard.write([
+                        new ClipboardItem({ [blob.type]: blob })
+                    ]);
+                },
+                args: [croppedDataUrl]
+            });
 
-                // Sometimes side panels lose focus, so we need to ensure it tries to write
-                await navigator.clipboard.write([
-                    new ClipboardItem({ [blob.type]: blob })
-                ]);
-                showToast('Cropped Image Copied');
-            } catch (clipboardErr) {
-                console.error('Clipboard write error:', clipboardErr);
-                // Fallback: If document is not focused, try to inject the copy command into the active tab
-                try {
-                    await chrome.scripting.executeScript({
-                        target: { tabId: tab.id },
-                        func: async (dataUrl) => {
-                            try {
-                                const res = await fetch(dataUrl);
-                                const blob = await res.blob();
-                                await navigator.clipboard.write([
-                                    new ClipboardItem({ [blob.type]: blob })
-                                ]);
-                                return true;
-                            } catch (e) {
-                                console.error("Injected copy failed", e);
-                                return false;
-                            }
-                        },
-                        args: [croppedDataUrl]
-                    });
-                    showToast('Cropped Image Copied (via tab)');
-                } catch (fallbackErr) {
-                    console.error('Fallback copy error:', fallbackErr);
-                    showToast('Crop Failed (Focus Issue)');
-                }
-            }
+            focusIframe();
+            showToast('Cropped — Ctrl+V to paste');
 
         } catch (err) {
             console.error('Crop failed:', err);
@@ -295,8 +276,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             };
         } catch (err) {
             console.error('Permission check failed:', err);
-            // If query fails (firefox etc), just show button? Or hide? 
-            // Chrome supports it.
             btnMic.style.display = 'inline-block';
         }
     }

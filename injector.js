@@ -1,3 +1,5 @@
+// Content script for AI chatbot pages in regular tabs
+// This is used when the AI sites are opened in normal browser tabs
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'INJECT_TEXT' && message.text) {
         injectText(message.text);
@@ -5,7 +7,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 function injectText(text) {
-    // Use heuristics to find the correct input field
     let target = document.activeElement;
 
     if (!target || (target.tagName !== 'TEXTAREA' && target.getAttribute('contenteditable') !== 'true' && target.tagName !== 'INPUT')) {
@@ -17,32 +18,23 @@ function injectText(text) {
     if (target) {
         target.focus();
 
-        // 1. Handle React-controlled inputs (ChatGPT, DeepSeek, etc.)
         if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') {
-            const proto = window.HTMLTextAreaElement.prototype;
-            const nativeInputValueSetter = Object.getOwnPropertyDescriptor(proto, "value").set;
-
-            if (nativeInputValueSetter) {
-                nativeInputValueSetter.call(target, text);
+            const proto = target.tagName === 'TEXTAREA'
+                ? window.HTMLTextAreaElement.prototype
+                : window.HTMLInputElement.prototype;
+            const setter = Object.getOwnPropertyDescriptor(proto, 'value')?.set;
+            if (setter) {
+                setter.call(target, text);
             } else {
                 target.value = text;
             }
-
             target.dispatchEvent(new Event('input', { bubbles: true }));
             target.dispatchEvent(new Event('change', { bubbles: true }));
-        }
-        // 2. Handle contenteditable (Gemini, etc.)
-        else if (target.getAttribute('contenteditable') === 'true') {
-            // For Gemini, we might need to clear specific children or just append.
-            // Simple text replacement for now.
+        } else if (target.getAttribute('contenteditable') === 'true') {
             target.innerText = text;
-
             target.dispatchEvent(new Event('input', { bubbles: true }));
         }
     } else {
-        // Fallback
         console.warn('Multi-AI: No suitable input field found.');
-        navigator.clipboard.writeText(text);
-        alert('Input not found. Text copied to clipboard.');
     }
 }
