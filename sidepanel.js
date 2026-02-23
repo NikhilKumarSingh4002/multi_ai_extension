@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         chrome.storage.local.set({ lastAiUrl: url });
         if (url.includes('claude.ai')) {
             showToast('⚠️ Voice mode is unavailable for Claude in the side panel.');
+        } else if (url.includes('notebooklm.google.com')) {
+            showToast('⚠️ NotebookLM requires you to be signed in to Google in your main browser.');
         }
     });
 
