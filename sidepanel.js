@@ -1,28 +1,71 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const selector = document.getElementById('ai-selector');
-    const frame = document.getElementById('ai-frame');
+    const mainContainer = document.querySelector('main');
     const btnScreenshot = document.getElementById('inject-screenshot');
     const toast = document.getElementById('toast');
 
-    // Load saved AI preference
-    const saved = await chrome.storage.local.get(['lastAiUrl']);
-    if (saved.lastAiUrl) {
-        selector.value = saved.lastAiUrl;
-        frame.src = saved.lastAiUrl;
-        if (saved.lastAiUrl.includes('claude.ai')) {
+    const frames = {}; // bot base url -> iframe element
+    let currentSelectedBot = '';
+
+    // Load saved AI preferences and session URLs
+    const savedLocal = await chrome.storage.local.get(['lastAiUrl']);
+    const savedSession = await chrome.storage.session.get(['botUrls']);
+    const botUrls = savedSession.botUrls || {};
+
+    const initUrl = savedLocal.lastAiUrl || selector.options[0].value;
+    selector.value = initUrl;
+    currentSelectedBot = initUrl;
+
+    function getBaseKey(url) {
+        if (url.includes('chatgpt.com')) return 'chatgpt.com';
+        if (url.includes('gemini.google.com')) return 'gemini.google.com';
+        if (url.includes('claude.ai')) return 'claude.ai';
+        if (url.includes('deepseek.com')) return 'deepseek.com';
+        if (url.includes('grok.com')) return 'grok.com';
+        if (url.includes('notebooklm.google.com')) return 'notebooklm.google.com';
+        return url;
+    }
+
+    function showBot(botUrl) {
+        // Hide all
+        Object.values(frames).forEach(f => f.style.display = 'none');
+
+        // Create if not exists
+        if (!frames[botUrl]) {
+            const frame = document.createElement('iframe');
+            frame.style.width = '100%';
+            frame.style.height = '100%';
+            frame.style.border = 'none';
+            frame.style.background = 'white';
+            frame.allow = "microphone *; camera *; clipboard-write; clipboard-read; fullscreen; display-capture";
+
+            let targetUrl = botUrl;
+            const baseKey = getBaseKey(botUrl);
+            if (botUrls[baseKey]) {
+                targetUrl = botUrls[baseKey];
+            }
+
+            frame.src = targetUrl;
+            mainContainer.insertBefore(frame, toast);
+            frames[botUrl] = frame;
+        }
+
+        frames[botUrl].style.display = 'block';
+
+        if (botUrl.includes('claude.ai')) {
             showToast('⚠️ Voice mode is unavailable for Claude in the side panel.', 5000);
+        } else if (botUrl.includes('notebooklm.google.com')) {
+            showToast('⚠️ NotebookLM requires you to be signed in to Google in your main browser.', 5000);
         }
     }
 
+    showBot(initUrl);
+
     selector.addEventListener('change', (e) => {
         const url = e.target.value;
-        frame.src = url;
+        currentSelectedBot = url;
         chrome.storage.local.set({ lastAiUrl: url });
-        if (url.includes('claude.ai')) {
-            showToast('⚠️ Voice mode is unavailable for Claude in the side panel.');
-        } else if (url.includes('notebooklm.google.com')) {
-            showToast('⚠️ NotebookLM requires you to be signed in to Google in your main browser.');
-        }
+        showBot(url);
     });
 
     function showToast(message, duration = 2000) {
@@ -43,7 +86,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Helper: focus the AI iframe so user can Ctrl+V
     function focusIframe() {
-        frame.focus();
+        if (frames[currentSelectedBot]) {
+            frames[currentSelectedBot].focus();
+        }
     }
 
     // URL Injection Logic

@@ -19,5 +19,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         }
       });
     });
+  } else if (message.action === 'UPDATE_URL' && message.url) {
+    chrome.storage.session.get(['botUrls'], (res) => {
+      let botUrls = res.botUrls || {};
+      const baseParams = ['chatgpt.com', 'gemini.google.com', 'claude.ai', 'deepseek.com', 'grok.com', 'notebooklm.google.com'];
+      for (const base of baseParams) {
+        if (message.hostname.includes(base)) {
+          botUrls[base] = message.url;
+          chrome.storage.session.set({ botUrls });
+          break;
+        }
+      }
+    });
   }
 });

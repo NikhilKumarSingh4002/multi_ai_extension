@@ -38,3 +38,16 @@ function injectText(text) {
         console.warn('Multi-AI: No suitable input field found.');
     }
 }
+
+// Track URL in iframes to persist session chat histories
+if (window.self !== window.top) {
+    let lastUrl = location.href;
+    setInterval(() => {
+        if (location.href !== lastUrl) {
+            lastUrl = location.href;
+            chrome.runtime.sendMessage({ action: 'UPDATE_URL', url: lastUrl, hostname: location.hostname });
+        }
+    }, 1000);
+    // Send initial URL
+    chrome.runtime.sendMessage({ action: 'UPDATE_URL', url: location.href, hostname: location.hostname });
+}

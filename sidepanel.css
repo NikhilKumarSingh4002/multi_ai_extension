@@ -91,7 +91,7 @@ main {
   /* fallback for some sites */
 }
 
-#ai-frame {
+main iframe {
   width: 100%;
   height: 100%;
   border: none;
