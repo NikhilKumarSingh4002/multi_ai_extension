@@ -91,6 +91,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // Reload button
+    const btnReload = document.getElementById('reload-bot');
+    btnReload.addEventListener('click', () => {
+        const frame = frames[currentSelectedBot];
+        if (frame) {
+            frame.src = frame.src;
+            showToast('Reloading...');
+        }
+    });
+
     // URL Injection Logic
     async function injectUrl() {
         try {
