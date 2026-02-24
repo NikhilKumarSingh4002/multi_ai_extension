@@ -37,7 +37,8 @@
                 "*://*.claude.ai/*",
                 "*://*.deepseek.com/*",
                 "*://*.grok.com/*",
-                "*://*.x.com/*"
+                "*://*.x.com/*",
+                "*://*.kimi.com/*"
             ],
             "js": [
                 "injector.js"

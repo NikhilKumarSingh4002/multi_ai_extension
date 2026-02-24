@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (url.includes('deepseek.com')) return 'deepseek.com';
         if (url.includes('grok.com')) return 'grok.com';
         if (url.includes('notebooklm.google.com')) return 'notebooklm.google.com';
+        if (url.includes('kimi.com')) return 'kimi.com';
         return url;
     }
 
