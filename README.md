@@ -1,6 +1,6 @@
 # Multi-AI Side Panel
 
-A Chrome extension that puts **five leading AI assistants** — Gemini, ChatGPT, Claude, DeepSeek, and Grok — right inside your browser's side panel. Switch between them instantly without leaving the page you're working on.
+A Chrome extension that puts **seven leading AI assistants** — Gemini, ChatGPT, Claude, DeepSeek, Grok, NotebookLM, and Kimi AI — right inside your browser's side panel. Switch between them instantly without leaving the page you're working on.
 
 ![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white)
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-0F9D58)
@@ -12,13 +12,15 @@ A Chrome extension that puts **five leading AI assistants** — Gemini, ChatGPT,
 
 | Feature | Description |
 |---|---|
-| **Multi-AI Switching** | Seamlessly switch between Gemini, ChatGPT, Claude, DeepSeek, and Grok from a dropdown selector. |
+| **Multi-AI Switching** | Seamlessly switch between Gemini, ChatGPT, Claude, DeepSeek, Grok, NotebookLM, and Kimi AI from a dropdown selector. |
 | **Side Panel Integration** | Runs inside Chrome's native Side Panel — chat with AI while browsing any website. |
 | **Copy Current URL** | One-click copy of the active tab's URL to your clipboard for easy pasting into any AI chat. |
 | **Screenshot to Clipboard** | Capture a screenshot of the visible tab and copy it to the clipboard instantly. |
+| **Crop to Clipboard** | Select and crop a region of the visible tab, then copy it to the clipboard. |
 | **Text Injection** | Inject selected text or page content directly into AI chatbot input fields (supports React inputs and `contenteditable` divs). |
 | **Microphone Access** | Dedicated permission flow for enabling microphone access for voice-enabled AI features. |
-| **Persistent Preference** | Remembers your last-used AI provider across sessions. |
+| **Session Persistence** | Keeps your chat sessions alive across AI switches — no more losing conversations until the browser is closed. |
+| **Reload Controls** | New Page button to refresh the current AI bot, and a Reload Extension button to fully restart the extension. |
 | **Claude Voice Handling** | Gracefully handles Claude's voice mode limitation inside iframes with user-friendly notices. |
 
 ---
