@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Reload button
+    // Reload button (new page)
     const btnReload = document.getElementById('reload-bot');
     btnReload.addEventListener('click', () => {
         const frame = frames[currentSelectedBot];
@@ -99,6 +99,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             frame.src = frame.src;
             showToast('Reloading...');
         }
+    });
+
+    // Reload Extension button — reloads the side panel and all iframes
+    const btnReloadExt = document.getElementById('reload-ext');
+    btnReloadExt.addEventListener('click', () => {
+        showToast('Reloading...');
+        setTimeout(() => {
+            location.reload();
+        }, 300);
     });
 
     // URL Injection Logic

@@ -56,7 +56,8 @@ header {
   text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
 }
 
-#reload-bot {
+#reload-bot,
+#reload-ext {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,12 +75,27 @@ header {
   padding: 0;
 }
 
-#reload-bot:hover {
+#reload-bot:hover,
+#reload-ext:hover {
   background: rgba(56, 189, 248, 0.3);
   border-color: rgba(56, 189, 248, 0.6);
   color: #fff;
   box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
   transform: scale(1.1);
+}
+
+#reload-ext:active {
+  animation: spin 0.5s ease;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .selector-area {
