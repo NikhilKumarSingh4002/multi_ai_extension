@@ -11,7 +11,8 @@
         "scripting",
         "activeTab",
         "clipboardWrite",
-        "clipboardRead"
+        "clipboardRead",
+        "management"
     ],
     "host_permissions": [
         "<all_urls>"

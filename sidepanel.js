@@ -101,13 +101,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Reload Extension button — reloads the side panel and all iframes
+    // Reload Extension button — disables and re-enables the extension
     const btnReloadExt = document.getElementById('reload-ext');
     btnReloadExt.addEventListener('click', () => {
-        showToast('Reloading...');
-        setTimeout(() => {
-            location.reload();
-        }, 300);
+        showToast('Reloading extension...');
+        chrome.runtime.sendMessage({ action: 'RELOAD_EXTENSION' });
     });
 
     // URL Injection Logic

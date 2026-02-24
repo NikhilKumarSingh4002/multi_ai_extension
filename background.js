@@ -31,5 +31,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         }
       }
     });
+  } else if (message.action === 'RELOAD_EXTENSION') {
+    chrome.runtime.reload();
   }
 });
