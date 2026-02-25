@@ -12,7 +12,8 @@
         "activeTab",
         "clipboardWrite",
         "clipboardRead",
-        "management"
+        "management",
+        "browsingData"
     ],
     "host_permissions": [
         "<all_urls>"

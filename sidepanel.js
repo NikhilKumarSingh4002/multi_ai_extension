@@ -97,8 +97,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     btnReload.addEventListener('click', () => {
         const frame = frames[currentSelectedBot];
         if (frame) {
-            frame.src = frame.src;
-            showToast('Reloading...');
+            try {
+                const origin = new URL(currentSelectedBot).origin;
+                showToast('Clearing cache...');
+
+                // Clear the cache and then reload to the default URL
+                chrome.browsingData.remove({
+                    origins: [origin]
+                }, {
+                    "cache": true,
+                    "cacheStorage": true
+                }, () => {
+                    const baseKey = getBaseKey(currentSelectedBot);
+                    delete botUrls[baseKey];
+                    chrome.storage.session.set({ botUrls });
+
+                    const baseUrl = selector.options[selector.selectedIndex].value;
+                    frame.src = baseUrl;
+                    showToast('New Page Loaded', 3000);
+                });
+            } catch (err) {
+                console.error('Failed to clear cache:', err);
+                const baseUrl = selector.options[selector.selectedIndex].value;
+                frame.src = baseUrl;
+                showToast('New Page Loaded', 3000);
+            }
         }
     });
 
